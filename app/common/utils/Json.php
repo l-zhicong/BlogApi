@@ -1,13 +1,4 @@
 <?php
-// +----------------------------------------------------------------------
-// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
-// +----------------------------------------------------------------------
-// | Author: CRMEB Team <admin@crmeb.com>
-// +----------------------------------------------------------------------
 
 namespace app\common\utils;
 
@@ -31,10 +22,10 @@ class Json
         return $this;
     }
 
-    public function make(int $status, string $msg, ?array $data = null): Response
+    public function make(int $code, string $msg, ?array $data = null): Response
     {
         $request = app()->request;
-        $res = compact('status', 'msg');
+        $res = compact('code', 'msg');
 
         if (!is_null($data))
             $res['data'] = $data;
@@ -52,12 +43,12 @@ class Json
         return Response::create($res, 'json', $this->code);
     }
 
-    public function success($msg = 'ok', ?array $data = null): Response
+    public function success($data = null,$msg = 'ok'): Response
     {
-        if (is_array($msg)) {
-            $data = $msg;
-            $msg = 'ok';
-        }
+//        if (is_array($msg)) {
+//            $data = $msg;
+//            $msg = 'ok';
+//        }
 
         return $this->make(200, $msg, $data);
     }

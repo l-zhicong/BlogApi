@@ -1,19 +1,9 @@
 <?php
-// +----------------------------------------------------------------------
-// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
-// +----------------------------------------------------------------------
-// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
-// +----------------------------------------------------------------------
-// | Author: CRMEB Team <admin@crmeb.com>
-// +----------------------------------------------------------------------
 
-namespace crmeb\utils;
+namespace app\common\utils;
 
 
-use crmeb\exceptions\AdminException;
-use crmeb\services\CacheService;
+use app\lib\exception\AdminException;
 use Firebase\JWT\JWT;
 use think\facade\Env;
 
@@ -34,7 +24,7 @@ class JwtAuth
     /**
      * @var string
      */
-    protected $app_key = 'crmeb_app_key';
+    protected $app_key = 'app_key';
 
     /**
      * 获取token
@@ -62,7 +52,7 @@ class JwtAuth
             'exp' => $exp_time,
         ];
         $params['jti'] = compact('id', 'type');
-        $token = JWT::encode($params, Env::get('app.app_key', $this->app_key) ?: $this->app_key);
+        $token = JWT::encode($params, Env::get('app.app_key', $this->app_key) ?: $this->app_key,'HS256',null,null);
 
         return compact('token', 'params');
     }
@@ -99,7 +89,7 @@ class JwtAuth
      * @param array $params
      * @return array
      */
-    public function createToken(int $id, string $type, array $params = [])
+    public function createToken(int $id, string $type,int $plat, $exp, array $params = [])
     {
         $tokenInfo = $this->getToken($id, $type, $params);
         $exp = $tokenInfo['params']['exp'] - $tokenInfo['params']['iat'] + 60;

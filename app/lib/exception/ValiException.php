@@ -17,7 +17,7 @@ class ValiException extends BaseException
             $errInfo = $message;
             $message = $errInfo[1] ?? '未知错误';
             if ($code === 0) {
-                $code = $errInfo[0] ?? 400;
+                $code = $errInfo[0] ?? $this->code;
             }
         }
 

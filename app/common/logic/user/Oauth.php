@@ -2,7 +2,7 @@
 /**
  * 第三方授权登录
  */
-namespace logic\user;
+namespace app\common\logic\user;
 class Oauth{
     
     private $type;  // 第三方登录类型

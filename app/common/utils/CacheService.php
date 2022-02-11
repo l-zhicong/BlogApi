@@ -193,6 +193,7 @@ class CacheService
             $redisCahce = self::redisHandler($type);
             return $redisCahce->set($key, $value, $expire);
         } catch (\Throwable $e) {
+            die($e->getMessage());
             return false;
         }
     }

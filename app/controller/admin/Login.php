@@ -11,9 +11,8 @@
 namespace app\controller\admin;
 
 use app\BaseController;
-use app\common\service\user\Passport;
+use app\service\admin\user\Login as Service;
 use app\common\utils\Captcha;
-use app\lib\exception\PlatException;
 use app\validate\admin\setting\SystemAdminValidata;
 use think\App;
 
@@ -28,11 +27,12 @@ class Login extends BaseController
     /**
      * Login constructor.
      * @param App $app
-     * @param SystemAdminServices $services
+     * @param Service $services
      */
-    public function __construct(App $app)
+    public function __construct(App $app,Service $service)
     {
         parent::__construct($app);
+        $this->service = $service;
     }
 
     protected function initialize()
@@ -58,23 +58,15 @@ class Login extends BaseController
      */
     public function login(SystemAdminValidata $validate)
     {
-        [$account, $password, $platkey,$code] = $this->request->postMore([
-            'account', 'pwd', ['plat_key', ''],'code'
+        [$account, $password, $platkey, $confpwd ,$code] = $this->request->postMore([
+            'account', 'pwd','conf_pwd', ['plat_key', ''],'code'
         ], true);
+        return $this->success($this->service->login($account,$password,$confpwd,$platkey,$code));
+    }
 
-        $data = $this->request->post();
-//        if (!app()->make(Captcha::class)->check($imgcode)) {
-//            return $this->fail('验证码错误，请重新输入');
-//        }
-        $validate->isLogin()->goCheck();
-        $plat = cache('plat_'.$platkey);
-        if(!$plat) throw new PlatException('平台参数错误');
-        if($plat != input('plat')) throw new PlatException('平台参数错误');
-        $passportObj = Passport::getInstance($plat);
-        $passportObj->checkCode($platkey, $code);
-        $admin = $passportObj->login($data);
-        $tokenInfo = $passportObj->createToken($admin->admin_id);
-        return $this->success($this->services->login($account, $password, 'admin'));
+    public function logout()
+    {
+        return $this->success([],$this->service->logout());
     }
 
     /**

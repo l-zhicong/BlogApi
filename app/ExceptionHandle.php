@@ -1,7 +1,11 @@
 <?php
 namespace app;
 
+use app\lib\exception\AdminException;
 use app\lib\exception\ApiException;
+use app\lib\exception\AuthException;
+use app\lib\exception\MsgException;
+use app\lib\exception\PlatException;
 use app\lib\exception\ValiException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -67,10 +71,14 @@ class ExceptionHandle extends Handle
         ] : [];
         // 添加自定义异常处理机制
         if ($e instanceof DbException) {
-            return app('json')->fail('数据获取失败', $massageData);
+//            return app('json')->fail('数据获取失败', $massageData);
         } elseif (
             $e instanceof ValiException ||
-            $e instanceof ApiException
+            $e instanceof ApiException ||
+            $e instanceof PlatException ||
+            $e instanceof MsgException  ||
+            $e instanceof AdminException ||
+            $e instanceof AuthException
         ) {
             return app('json')->make($e->getCode() ?: 400, $e->getMessage(), $massageData);
         }
