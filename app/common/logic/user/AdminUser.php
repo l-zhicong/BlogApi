@@ -30,5 +30,9 @@ class AdminUser extends Base implements AbsUser {
     public function getInfo($adminId)
     {
         // TODO: Implement getInfo() method.
+        $userObj = $this->model->getInfoById($adminId);
+        $userArray = $userObj->toArray();
+        $userArray["name"] = $userObj->real_name;
+        return $userArray;
     }
 }

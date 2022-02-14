@@ -5,6 +5,7 @@
 namespace app\common\logic\user;
 use app\common\utils\Captcha;
 use app\common\utils\JwtAuth;
+use app\lib\exception\AuthException;
 use think\facade\Cache;
 use app\lib\exception\PlatException;
 class Passport{
@@ -42,6 +43,10 @@ class Passport{
         $loginInfo = $this->passportObject->login($param);
 //        $this->loginInfo = $loginInfo;
         return $loginInfo;
+    }
+
+    public function getInfo($uid){
+       return $this->passportObject->getInfo($uid);
     }
 
     /**
@@ -83,7 +88,7 @@ class Passport{
         $exp = intval(config('system.token_exp'));
         $lastTime = date('Y-m-d H:i:s');
         $platLastTime = Cache::set('login_last_time_'.$this->plat.'_'.$userId,$lastTime);
-        $token = $service->createToken($userId, $this->type, $this->plat, strtotime("+ {$exp}hour"), ['login_time' => $lastTime]);
+        $token = $service->createToken($userId, $this->type, $this->plat, $exp, ['login_time' => $lastTime]);
 //        $this->cacheToken($token['token'], $token['out']);
         return $token;
     }
@@ -95,6 +100,8 @@ class Passport{
 
     public function checkToken(string $token)
     {
+        $JwtObj = new JwtAuth();
+        $JwtObj->verifyToken();
         $has = Cache::has($this->platList[$this->plat].'_' . $token);
         if (!$has)
             throw new AuthException('无效的token');

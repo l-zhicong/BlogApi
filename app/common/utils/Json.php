@@ -29,6 +29,9 @@ class Json
 
         if (!is_null($data))
             $res['data'] = $data;
+        else
+            $data = [];
+            $res['data'] = $data;
 
         if ($res['msg'] && !is_numeric($res['msg'])) {
             if (!$range = $request->get('lang')) {

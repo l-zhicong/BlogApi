@@ -38,6 +38,47 @@ abstract class BaseController extends Json
     protected $middleware = [];
 
     /**
+     *  service 实例化的服务
+     */
+    protected $service;
+
+    /**
+     * repository  实例化的逻辑类
+     */
+    protected $repository;
+
+    /**
+     * 当前登陆管理员信息
+     * @var
+     */
+    protected $userInfo;
+
+    /**
+     * 当前登陆管理员ID
+     * @var
+     */
+    protected $adminId;
+
+    /**
+     * 当前登陆用户ID
+     * @var
+     */
+    protected $uid;
+
+
+    /**
+     * 平台id
+     * @var int
+     */
+    protected $plat;
+
+    /**
+     * 当前管理员权限
+     * @var array
+     */
+    protected $auth = [];
+
+    /**
      * 构造方法
      * @access public
      * @param  App  $app  应用对象
@@ -53,7 +94,12 @@ abstract class BaseController extends Json
 
     // 初始化
     protected function initialize()
-    {}
+    {
+        $this->adminId = $this->request->adminId();
+        $this->userInfo = $this->request->userInfo();
+        $this->plat = $this->request->plat();
+        $this->auth = $this->request->adminInfo['rule'] ?? [];
+    }
 
     /**
      * 验证数据
@@ -91,5 +137,6 @@ abstract class BaseController extends Json
 
         return $v->failException(true)->check($data);
     }
+
 
 }

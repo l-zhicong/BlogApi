@@ -27,8 +27,9 @@ class SystemAdminValidata extends BaseValidate
     public function isLogin(){
         $this->rule = [
         'account|管理员账号' => 'require|max:11',
-        'conf_pwd|确认密码' => 'require',
+//        'conf_pwd|确认密码' => 'require',
         'pwd|密码' => 'require',
+        'code|验证码' => 'require',
         ];
         return $this;
     }

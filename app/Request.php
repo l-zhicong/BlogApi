@@ -21,11 +21,8 @@ use Spatie\Macroable\Macroable;
  * @method uid() 获取用户uid
  * @method isAdminLogin() 后台登陆状态
  * @method adminId() 后台管理员id
- * @method adminInfo() 后台管理信息
- * @method kefuId() 客服id
- * @method kefuInfo() 客服信息
- * @method outId() 对外接口用户id
- * @method outInfo() 对外接口用户id
+ * @method userInfo() 后台管理信息
+ * @method plat() 平台ID
  */
 class Request extends \think\Request
 {

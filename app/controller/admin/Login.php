@@ -58,10 +58,11 @@ class Login extends BaseController
      */
     public function login(SystemAdminValidata $validate)
     {
-        [$account, $password, $platkey, $confpwd ,$code] = $this->request->postMore([
-            'account', 'pwd','conf_pwd', ['plat_key', ''],'code'
+        [$account, $password, $platkey ,$code] = $this->request->postMore([
+            'account', 'pwd', ['plat_key', ''],'code'
         ], true);
-        return $this->success($this->service->login($account,$password,$confpwd,$platkey,$code));
+        $validate->isLogin()->goCheck();
+        return $this->success($this->service->login($account,$password,$platkey,$code));
     }
 
     public function logout()

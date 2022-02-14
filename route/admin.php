@@ -32,39 +32,26 @@ Route::group('adminapi',function (){
             Route::Post('info','v1.User/getInfo');
         });
 
-        //管理员
-        Route::group('system',function(){
-            Route::post('lst','/Admin/getList')->alias('systemLst');
-            Route::post('create','/Admin/create')->alias('systemCreate');
-            Route::get('update/:id','/Admin/update')->alias('systemUpdateForm');
-            Route::post('update/:id','/Admin/update')->alias('systemUpdate');
-            Route::post('password/:id','/Admin/password')->alias('systemPassword');
-            Route::post('delete/:id','/Admin/delete')->alias('systemDelete');
-            Route::post('status/:id','/Admin/updateStatus')->alias('systemStatus');
-            Route::post('roleForm','/Admin/roleForm')->alias('systemRoleForm');
-            Route::get('log', '/AdminLog/lst')->alias('systemAdminLog');
-        });
-
         //权限管理
         Route::group('menu',function(){
-            Route::post('lst','/Menu/getList')->alias('menuLst');
-            Route::post('create','/Menu/create')->alias('menuCreate');
-            Route::get('create/form','/Menu/createForm')->alias('menuCreateForm');
-            Route::get('update/:id','/Menu/update')->alias('menuUpdateForm');
-            Route::post('update/:id','/Menu/update')->alias('menuUpdate');
-            Route::post('delete/:id','/Menu/delete')->alias('menuDelete');
+            Route::get('lst','v1.Menu/getList')->alias('menuLst');
+            Route::post('create','v1.Menu/create')->alias('menuCreate');
+            Route::get('create/form','v1.Menu/createForm')->alias('menuCreateForm');
+            Route::get('update/:id','v1.Menu/update')->alias('menuUpdateForm');
+            Route::post('update/:id','v1.Menu/update')->alias('menuUpdate');
+            Route::delete('delete/:id','v1.Menu/delete')->alias('menuDelete');
         });
         Route::post('menus','/Menu/menus');
 
         //身份管理
         Route::group('role',function(){
-            Route::post('lst','/Role/getList')->alias('roleLst');
-            Route::post('create','/Role/create')->alias('roleCreate');
-            Route::get('create/form','/Role/createForm')->alias('roleCreateForm');
-            Route::get('update/:id','/Role/update')->alias('roleUpdateForm');
-            Route::post('update/:id','/Role/update')->alias('roleUpdate');
-            Route::post('delete/:id','/Role/delete')->alias('roleDelete');
-            Route::post('status/:id','/Role/updateStatus')->alias('roleStatus');
+            Route::get('lst','v1.Role/getList')->alias('roleLst');
+            Route::post('create','v1.Role/create')->alias('roleCreate');
+            Route::get('create/form','v1.Role/createForm')->alias('roleCreateForm');
+            Route::get('update/:id','v1.Role/update')->alias('roleUpdateForm');
+            Route::post('update/:id','v1.Role/update')->alias('roleUpdate');
+            Route::delete('delete/:id','v1.Role/delete')->alias('roleDelete');
+            Route::post('status/:id','v1.Role/updateStatus')->alias('roleStatus');
         });
 
         //用户管理

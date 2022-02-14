@@ -12,7 +12,7 @@ class ApiErrorCode
     const SUCCESS = [200, 'SUCCESS'];
     const ERROR = [400, 'ERROR'];
 
-    const ERR_LOGIN_INVALID = [410000, 'Landing overdue'];
+    const ERR_LOGIN_INVALID = [402, 'token 过期'];
     const ERR_AUTH = [400011, 'You do not have permission to access for the time being'];
     const ERR_RULE = [400012, 'Interface is not authorized, you cannot access'];
     const ERR_ADMINID_VOID = [400013, 'Failed to get administrator ID'];
@@ -21,7 +21,7 @@ class ApiErrorCode
     //登陆状态不正确
     const ERR_LOGIN_STATUS = [410002, 'The login status is incorrect. Please login again.'];
     //请登陆
-    const ERR_LOGIN = [410000, 'Please login'];
+    const ERR_LOGIN = [402, '请登录'];
 
     //公众号访问错误请求码
     const ERROR_WECHAT_MESSAGE = [

@@ -5,6 +5,7 @@ namespace app\common\utils;
 
 use app\lib\exception\AdminException;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use think\facade\Env;
 
 /**
@@ -30,10 +31,12 @@ class JwtAuth
      * 获取token
      * @param int $id
      * @param string $type
+     * @param int $plat 平台参数
+     * @param int $exp 过期时间
      * @param array $params
      * @return array
      */
-    public function getToken(int $id, string $type, array $params = []): array
+    public function getToken(int $id, string $type, int $plat, int $exp, array $params = []): array
     {
         $host = app()->request->host();
         $time = time();
@@ -51,7 +54,7 @@ class JwtAuth
             'nbf' => $time,
             'exp' => $exp_time,
         ];
-        $params['jti'] = compact('id', 'type');
+        $params['jti'] = compact('id', 'type','plat');
         $token = JWT::encode($params, Env::get('app.app_key', $this->app_key) ?: $this->app_key,'HS256',null,null);
 
         return compact('token', 'params');
@@ -67,7 +70,7 @@ class JwtAuth
         $this->token = $jwt;
         list($headb64, $bodyb64, $cryptob64) = explode('.', $this->token);
         $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64));
-        return [$payload->jti->id, $payload->jti->type];
+        return [$payload->jti->id,$payload->jti->type,$payload->jti->plat];
     }
 
     /**
@@ -76,9 +79,8 @@ class JwtAuth
     public function verifyToken()
     {
         JWT::$leeway = 60;
-
-        JWT::decode($this->token, Env::get('app.app_key', $this->app_key) ?: $this->app_key, array('HS256'));
-
+//        JWT::decode($this->token, Env::get('app.app_key', $this->app_key) ?: $this->app_key, array('HS256'));
+        JWT::decode($this->token, new Key(Env::get('app.app_key', $this->app_key) ?: $this->app_key, 'HS256'));
         $this->token = null;
     }
 
@@ -89,9 +91,9 @@ class JwtAuth
      * @param array $params
      * @return array
      */
-    public function createToken(int $id, string $type,int $plat, $exp, array $params = [])
+    public function createToken(int $id, string $type,int $plat, int $exp, array $params = [])
     {
-        $tokenInfo = $this->getToken($id, $type, $params);
+        $tokenInfo = $this->getToken($id, $type, $plat, $exp, $params);
         $exp = $tokenInfo['params']['exp'] - $tokenInfo['params']['iat'] + 60;
         $res = CacheService::setTokenBucket(md5($tokenInfo['token']), ['uid' => $id, 'type' => $type, 'token' => $tokenInfo['token'], 'exp' => $exp], (int)$exp);
         if (!$res) {
