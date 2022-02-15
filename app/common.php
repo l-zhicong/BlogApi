@@ -102,3 +102,18 @@ if (!function_exists('object_to_array')) {
         return $obj;
     }
 }
+
+/**
+ * 返回分页数组格式
+ */
+if (!function_exists('formatPaginate')) {
+    function formatPaginate($list,$newData = [])
+    {
+        return [
+            'page' => $list->currentPage(),
+            'total' => $list->total(),
+            'lastPage' => $list->lastPage(),
+            'list' => count($newData) ? $newData : $list->items()
+        ];
+    }
+}

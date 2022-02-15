@@ -10,7 +10,6 @@ class SystemAdminValidata extends BaseValidate
 
     protected $rule = [
         'account|管理员账号' => 'require|max:11',
-        'conf_pwd|确认密码' => 'require',
         'pwd|密码' => 'require',
         'real_name|管理员姓名' => 'integer|max:10',
         'roles|管理员身份' => 'array'
@@ -33,6 +32,7 @@ class SystemAdminValidata extends BaseValidate
         ];
         return $this;
     }
+
 
 
 }
