@@ -32,7 +32,7 @@ Route::group('adminapi',function (){
             Route::Post('info','v1.User/getInfo');
         });
 
-        //权限管理
+        //菜单管理
         Route::group('menu',function(){
             Route::get('lst','v1.Menu/getList')->alias('menuLst');
             Route::post('create','v1.Menu/create')->alias('menuCreate');
@@ -64,6 +64,23 @@ Route::group('adminapi',function (){
             Route::get('getListByName','/User/getIdListByName')->alias('userListByName');
             Route::get('userExtractRecord','/User/userExtractRecord')->alias('userExtractRecord');
             Route::post('extractStatus/:id','/User/extractStatus')->alias('userExtractStatus');
+        });
+
+        Route::group('article', function () {
+            Route::get('lst', 'v1.article.Article/getList')->name('systemArticlArticleLst');
+            Route::post('create', '/article.Article/ArticleCreate')->name('systemArticleArticleCreate');
+            Route::post('update/:id', '/article.Article/ArticleUpdate')->name('systemArticArticleleUpdate');
+            Route::post('delete/:id', '/article.Article/delete')->name('systemArticArticleleDelete');
+            Route::get('updateForm/:id', '/article.Article/ArticleUpdate')->name('systemArticArticleleDetail');
+            //文章类别管理
+            Route::group('category',function(){
+                Route::get('lst', '/article.ArticleCategory/list')->name('systemArticleCategoryLst');
+                Route::post('create', '/article.ArticleCategory/create')->name('systemArticleCategoryCreate');
+                Route::get('updateForm/:id', '/article.ArticleCategory/update')->name('systemArticleCategoryUpdateForm');
+                Route::post('update/:id', '/article.ArticleCategory/update')->name('systemArticleCategoryUpdate');
+                Route::post('status/:id', '/article.ArticleCategory/switchStatus')->name('systemArticleCategoryStatus');
+                Route::post('delete/:id', '/article.ArticleCategory/delete')->name('systemArticleCategoryDelete');
+            });
         });
 
     })->middleware(AuthTokenMiddleware::class)->middleware(AllowOriginMiddleware::class);
