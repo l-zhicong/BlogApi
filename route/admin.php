@@ -9,7 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 use app\common\middleware\AllowOriginMiddleware;
-use app\common\middleware\AuthTokenMiddleware;
+use app\common\middleware\AdminTokenMiddleware;
 use think\facade\Route;
 
 
@@ -34,14 +34,14 @@ Route::group('adminapi',function (){
 
         //菜单管理
         Route::group('menu',function(){
-            Route::get('lst','v1.Menu/getList')->alias('menuLst');
+            Route::get('getTree','v1.Menu/getList')->alias('menuLst');
+            Route::get('lst','v1.Menu/menus');
             Route::post('create','v1.Menu/create')->alias('menuCreate');
             Route::get('create/form','v1.Menu/createForm')->alias('menuCreateForm');
             Route::get('update/:id','v1.Menu/update')->alias('menuUpdateForm');
             Route::post('update/:id','v1.Menu/update')->alias('menuUpdate');
             Route::delete('delete/:id','v1.Menu/delete')->alias('menuDelete');
         });
-        Route::post('menus','/Menu/menus');
 
         //身份管理
         Route::group('role',function(){
@@ -83,7 +83,7 @@ Route::group('adminapi',function (){
             });
         });
 
-    })->middleware(AuthTokenMiddleware::class)->middleware(AllowOriginMiddleware::class);
+    })->middleware(AdminTokenMiddleware::class)->middleware(AllowOriginMiddleware::class);
 
 
 })->prefix('admin.');

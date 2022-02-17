@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\controller\admin;
 
-use app\BaseController;
+use app\common\Base\AdminBaseController;
 use app\service\admin\user\Login as Service;
 use app\common\utils\Captcha;
 use app\validate\admin\setting\SystemAdminValidata;
@@ -21,7 +21,7 @@ use think\App;
  * Class Login
  * @package app\controller\admin
  */
-class Login extends BaseController
+class Login extends AdminBaseController
 {
 
     /**

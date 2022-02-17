@@ -2,11 +2,11 @@
 
 namespace app\controller\admin\v1;
 
-use app\BaseController;
+use app\common\Base\AdminBaseController;
 use think\App;
 use app\service\admin\user\User as Service;
 
-class User extends BaseController
+class User extends AdminBaseController
 {
     public function __construct(App $app,Service $service)
     {

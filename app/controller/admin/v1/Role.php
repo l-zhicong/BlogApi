@@ -1,12 +1,12 @@
 <?php
 
 namespace app\controller\admin\v1;
-use app\BaseController;
+use app\common\Base\AdminBaseController;
 use app\common\logic\system\admin\Role as RoleLogic;
 use app\validate\admin\setting\SystemRoleValidata;
 use think\App;
 
-Class Role extends BaseController
+Class Role extends AdminBaseController
 {
 	public function __construct(App $app,RoleLogic $repository)
     {

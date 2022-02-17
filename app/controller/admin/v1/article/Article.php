@@ -18,13 +18,13 @@
 
 namespace app\controller\admin\v1\article;
 
-use app\BaseController;
+use app\common\Base\AdminBaseController;
 use app\common\logic\article\Article as ArticleRepository;
 use app\common\logic\article\ArticleCategory as ArticleCategoryRepository;
 use app\validate\admin\article\ArticleValidate;
 use think\App;
 
-class Article extends BaseController
+class Article extends AdminBaseController
 {
 
     public function __construct(App $app,ArticleRepository $repository)

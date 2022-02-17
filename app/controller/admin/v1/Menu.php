@@ -11,12 +11,12 @@
 
 namespace app\controller\admin\v1;
 
-use app\BaseController;
+use app\common\Base\AdminBaseController;
 use app\common\logic\system\admin\Menu as MenuLogic;
 use app\validate\admin\setting\SystemMenusValidate;
 use think\App;
 
-class Menu extends BaseController
+class Menu extends AdminBaseController
 {
 
     public function __construct(App $app,MenuLogic $service)
@@ -48,9 +48,8 @@ class Menu extends BaseController
     public function create(SystemMenusValidate $validate)
     {
         $data = $validate->isCreate()->goCheck();
-        if ($data['pid'] && !$this->service->platExists($data['pid'], $this->plat))
+        if ($data['pid'] && !$this->service->platExists($data['pid'], $data['plat_type']))
             return $this->fail('父级分类不存在');
-        $data['plat_type'] = $this->plat;
         $this->service->add($data);
         return $this->success([]);
     }
@@ -62,7 +61,7 @@ class Menu extends BaseController
 
     public function menus()
     {
-        $menus = $this->request->userInfo()->level
+        $menus = $this->request->userInfo()['level']
             ? $this->service->ruleByMenuList($this->request->adminRule(), $this->request->plat())
             : $this->service->getValidMenuList($this->request->plat());
         foreach ($menus as $k => $menu) {
@@ -98,17 +97,12 @@ class Menu extends BaseController
 
     public function delete($id)
     {
-        if ($this->service->pidExists($id))
-            return $this->fail('存在下级,无法删除',[]);
-        if (!$this->service->IdExists($id))
-            return $this->fail('不存在该菜单');
-        $data = $this->service->find($id);
-        if ($data){
-            return $this->success('删除成功');
-        }else{
-            return $this->fail("删除失败");
+        if ($id) {
+            $this->service->del($id);
+            return $this->success([],'删除成功!');
+        } else {
+            return $this->fail('参数错误');
         }
-
     }
 
 }

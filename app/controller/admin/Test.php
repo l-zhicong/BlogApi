@@ -9,9 +9,9 @@
 namespace app\controller\admin;
 
 
-use app\BaseController;
+use app\AdminBaseController;
 
-class Test extends BaseController
+class Test extends AdminBaseController
 {
 
     public function test(){

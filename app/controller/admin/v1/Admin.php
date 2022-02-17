@@ -11,12 +11,12 @@
 
 namespace app\controller\admin\v1;
 
-use app\BaseController;
+use app\common\Base\AdminBaseController;
 use app\common\logic\system\admin\Admin as AdminLogic;
 use app\validate\admin\setting\AdminValidate;
 use think\App;
 
-class Admin extends BaseController
+class Admin extends AdminBaseController
 {
     public function __construct(App $app,AdminLogic $repository)
     {
