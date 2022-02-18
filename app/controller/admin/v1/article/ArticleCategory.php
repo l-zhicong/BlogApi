@@ -34,7 +34,7 @@ class ArticleCategory extends AdminBaseController
 
     public function list()
     {
-       $static = $this->request->postMore(['static'],true);
+       [$static] = $this->request->postMore(['static'],true);
        $result = $this->repository->getFormatList($static);
        return $this->success($result);
     }
@@ -50,7 +50,7 @@ class ArticleCategory extends AdminBaseController
     {
         $param = $validate->isCreate()->goCheck();
         $this->repository->create($param);
-        return $this->success('添加成功');
+        return $this->success([],'添加成功');
     }
 
     public function update($id, ArticleCategoryValidate $validate)

@@ -16,25 +16,15 @@ Class Role extends AdminBaseController
 
     public function getList()
     {
-        [$page, $limit] = [input('page',1),input('limit',20)];
-        if($this->request->plat() == 1){
-    		$platId = 0;
-    	}else{
-    		$platId = $this->schoolId();
-    	}
-        return $this->success($this->repository->search($platId, [], $page, $limit));
+        [$page, $limit] = $this->request->getMore([['page', 1],['limit',20]], true);
+        return $this->success($this->repository->search($this->request->plat(), [], $page, $limit));
     }
 
     public function create(SystemRoleValidata $validate)
     {
     	$data = $validate->goCheck();
     	$data['plat_type'] = $this->request->plat();
-    	if($this->request->plat() == 1){
-    		$platId = 0;
-    	}else{
-    		$platId = $this->schoolId();
-    	}
-        $data['plat_id'] = $platId;
+        $data['plat_id'] = $this->request->plat();
         $this->repository->save($data);
         return $this->success([],'添加成功');
     }
@@ -78,7 +68,7 @@ Class Role extends AdminBaseController
     {
         $info = $this->repository->platExists($id, $this->plat);
         if(!$info) $this->fail('数据不存在');
-        $type = input('type');//1-启用，0-禁用
+        [$type] = $this->request->postMore(['type'],true);//1-启用，0-禁用
         if(!in_array($type, [0,1])) return $this->fail('类型不存在');
         switch ($type) {
             case 1:
@@ -90,7 +80,7 @@ Class Role extends AdminBaseController
                 $info->save(['status' => 0]);
                 break;
         }
-        return $this->success('操作成功');
+        return $this->success([],'操作成功');
     }
 
     public function delete($id)

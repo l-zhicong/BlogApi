@@ -62,7 +62,8 @@ class Menu extends AdminBaseController
     public function menus()
     {
         $menus = $this->request->userInfo()['level']
-            ? $this->service->ruleByMenuList($this->request->adminRule(), $this->request->plat())
+//            ? $this->service->ruleByMenuList($this->request->adminRule(), $this->request->plat())
+            ? $this->service->getValidMenuList($this->request->plat())
             : $this->service->getValidMenuList($this->request->plat());
         foreach ($menus as $k => $menu) {
             $menu['path'] = $menu['route'];

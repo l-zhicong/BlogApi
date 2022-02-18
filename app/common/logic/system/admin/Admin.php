@@ -25,9 +25,8 @@ class Admin extends Base
     public function getList(array $where, $page, $limit)
     {
         $query = $this->model->search($where);
-        $count = $query->count();
-        $list = $query->paginate($limit,false,['page'=>$page])->hidden(['pwd', 'is_del', 'update_time']);
-
+        $count = $query->fetchSql(true)->count();
+        $list = $query->paginate(['page'=>$page],false)->hidden(['pwd', 'is_del', 'update_time']);
         foreach ($list as $k => $role) {
             $list[$k]['rule_name'] = $role->roleNames();
         }

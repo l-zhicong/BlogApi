@@ -24,5 +24,5 @@ use app\common\model\BaseModel;
 class ArticleContent extends BaseModel
 {
     protected $table = 'article_content';
-
+    protected $pk = "article_content_id";
 }

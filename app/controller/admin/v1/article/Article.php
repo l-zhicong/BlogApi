@@ -63,9 +63,8 @@ class Article extends AdminBaseController
     public function delete($id)
     {
         $res = $this->repository->delete($id);
-        if($res)
-        {
-            return  $this->success('删除成功',$res);
+        if($res) {
+            return  $this->success([],'删除成功');
         }else{
             return $this->fail('删除失败');
         }

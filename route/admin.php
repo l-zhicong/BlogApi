@@ -12,7 +12,6 @@ use app\common\middleware\AllowOriginMiddleware;
 use app\common\middleware\AdminTokenMiddleware;
 use think\facade\Route;
 
-
 Route::group('adminapi',function (){
     /*public*/
     Route::group(function () {
@@ -32,6 +31,19 @@ Route::group('adminapi',function (){
             Route::Post('info','v1.User/getInfo');
         });
 
+        //管理员
+        Route::group('system',function(){
+            Route::get('lst', 'v1.Admin/getList')->alias('systemLst');
+            Route::post('create','v1.Admin/create')->alias('systemCreate');
+            Route::get('info/:id','v1.Admin/update')->alias('systemUpdateForm');
+            Route::post('update/:id','v1.Admin/update')->alias('systemUpdate');
+            Route::post('password/:id','v1.Admin/password')->alias('systemPassword');
+            Route::delete('delete/:id','v1.Admin/delete')->alias('systemDelete');
+            Route::post('status/:id','v1.Admin/updateStatus')->alias('systemStatus');
+            Route::get('roleForm','v1.Admin/roleForm')->alias('systemRoleForm'); //身份
+            Route::get('log', 'v1.AdminLog/lst')->alias('systemAdminLog');
+        });
+
         //菜单管理
         Route::group('menu',function(){
             Route::get('getTree','v1.Menu/getList')->alias('menuLst');
@@ -47,8 +59,8 @@ Route::group('adminapi',function (){
         Route::group('role',function(){
             Route::get('lst','v1.Role/getList')->alias('roleLst');
             Route::post('create','v1.Role/create')->alias('roleCreate');
-            Route::get('create/form','v1.Role/createForm')->alias('roleCreateForm');
-            Route::get('update/:id','v1.Role/update')->alias('roleUpdateForm');
+            Route::get('getTree','v1.Role/createForm')->alias('roleCreateForm');
+            Route::get('info/:id','v1.Role/update')->alias('roleUpdateForm');
             Route::post('update/:id','v1.Role/update')->alias('roleUpdate');
             Route::delete('delete/:id','v1.Role/delete')->alias('roleDelete');
             Route::post('status/:id','v1.Role/updateStatus')->alias('roleStatus');
@@ -68,18 +80,18 @@ Route::group('adminapi',function (){
 
         Route::group('article', function () {
             Route::get('lst', 'v1.article.Article/getList')->name('systemArticlArticleLst');
-            Route::post('create', '/article.Article/ArticleCreate')->name('systemArticleArticleCreate');
-            Route::post('update/:id', '/article.Article/ArticleUpdate')->name('systemArticArticleleUpdate');
-            Route::post('delete/:id', '/article.Article/delete')->name('systemArticArticleleDelete');
-            Route::get('updateForm/:id', '/article.Article/ArticleUpdate')->name('systemArticArticleleDetail');
+            Route::post('create', 'v1.article.Article/ArticleCreate')->name('systemArticleArticleCreate');
+            Route::post('update/:id', 'v1.article.Article/ArticleUpdate')->name('systemArticArticleleUpdate');
+            Route::delete('delete/:id', 'v1.article.Article/delete')->name('systemArticArticleleDelete');
+            Route::get('updateForm/:id', 'v1.article.Article/ArticleUpdate')->name('systemArticArticleleDetail');
             //文章类别管理
             Route::group('category',function(){
-                Route::get('lst', '/article.ArticleCategory/list')->name('systemArticleCategoryLst');
-                Route::post('create', '/article.ArticleCategory/create')->name('systemArticleCategoryCreate');
-                Route::get('updateForm/:id', '/article.ArticleCategory/update')->name('systemArticleCategoryUpdateForm');
-                Route::post('update/:id', '/article.ArticleCategory/update')->name('systemArticleCategoryUpdate');
-                Route::post('status/:id', '/article.ArticleCategory/switchStatus')->name('systemArticleCategoryStatus');
-                Route::post('delete/:id', '/article.ArticleCategory/delete')->name('systemArticleCategoryDelete');
+                Route::get('lst', 'v1.article.ArticleCategory/list')->name('systemArticleCategoryLst');
+                Route::post('create', 'v1.article.ArticleCategory/create')->name('systemArticleCategoryCreate');
+                Route::get('updateForm/:id', 'v1.article.ArticleCategory/update')->name('systemArticleCategoryUpdateForm');
+                Route::post('update/:id', 'v1.article.ArticleCategory/update')->name('systemArticleCategoryUpdate');
+                Route::post('status/:id', 'v1.article.ArticleCategory/switchStatus')->name('systemArticleCategoryStatus');
+                Route::post('delete/:id', 'v1.article.ArticleCategory/delete')->name('systemArticleCategoryDelete');
             });
         });
 

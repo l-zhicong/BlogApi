@@ -3,6 +3,7 @@ namespace app\common\logic\article;
 use app\common\logic\Base;
 use app\common\model\article\Article as Articlemodel;
 use app\common\model\article\ArticleFabulous;
+use think\Exception;
 use think\facade\Db;
 
 /**
@@ -24,12 +25,17 @@ class Article extends Base
     public function create(array $data) :void
     {
         if(!(new ArticleCategory())->getCategoryId($data['cid'])) E('分类不存在');
-        Db::transaction(function()use($data){
-            $content = $data['content'];
-            unset($data['content']);
-            $article = $this->model->create($data);
-            $article->content()->save(['content' => $content]);
-        });
+        try {
+            Db::transaction(function()use($data){
+                $content = $data['content'];
+                unset($data['content']);
+                $article = $this->model->create($data);
+                $article->content()->save(['content' => $content]);
+            });
+        }catch (Exception $e){
+            E($e->getMessage());
+        }
+
     }
 
     public function update(int $id, array $data)
@@ -39,7 +45,7 @@ class Article extends Base
         Db::transaction(function()use($id,$data){
             $content = $data['content'];
             unset($data['content']);
-            $this->model->save($data,['id'=>$id]);
+            $this->model->update($data,['id'=>$id]);
             $article = $this->model->find($id);
             $article->content->content = $content;
             $article->together(['content'])->save();
@@ -50,24 +56,25 @@ class Article extends Base
     {
         $data = $this->model->search($where)->field($field)->find();
         $data['FabulousNum'] = $data->Fabulous->where('status',1)->count();
-        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']);
-        return $data;
+//        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']);
+        return $data->toArray();
     }
 
     public function List($where,$limit,$page)
     {
         $query = $this->model->search($where);
-        $list = $query->paginate($limit, false, ['page' => $page]);
-        foreach ($list as $k=> $v)
-        {
-            $list[$k]['Fabulous'] = $v->Fabulous;
-            $list[$k]['FabulousNum'] = $v->Fabulous->where('status',1)->count();
-        }
+        $list = $query->paginate($limit, false);
+//        foreach ($list as $k=> $v)
+//        {
+//            $list[$k]['Fabulous'] = $v->Fabulous;
+//            $list[$k]['FabulousNum'] = $v->Fabulous->where('status',1)->count();
+//        }
         return formatPaginate($list);
     }
 
     public function delete($id){
         if (!$this->model->find($id))E('数据不存在');
-        return $this->model->destroy($id);
+        $this->model->destroy($id);
+        return $this->model->content()->delete($id);
     }
 }
