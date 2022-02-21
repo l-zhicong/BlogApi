@@ -41,9 +41,14 @@ class ArticleCategory extends AdminBaseController
 
     public function switchStatus($id)
     {
-        $status = $this->request->postMore(['status'], true) == 1 ? 1 : 0;
-        $res = $this->repository->switchStatus($id,$status);
-        return $this->success($res,'修改成功');
+        [$type] = $this->request->postMore(['type'], true);
+        $status = $type == 1 ? 1 : 0;
+        if ($this->repository->switchStatus($id,$status)){
+            return $this->success([],'修改成功');
+        }else{
+            return $this->fail('修改失败');
+        }
+
     }
 
     public function create(ArticleCategoryValidate $validate)
@@ -60,14 +65,13 @@ class ArticleCategory extends AdminBaseController
             $data = $this->repository->getdata($id,[]);
             return $this->success($data,'操作成功');
         }else{
-            $validate->isUpdate()->goCheck();
-            $arr = request()->post();
+            $arr = $validate->isUpdate()->goCheck();
             if (!$this->repository->existsWhere(['article_category_id'=>$id]))
                 E('数据不存在');
             if (isset($arr['pid']) && !$this->repository->existsWhere(['pid'=>$arr['pid']]))
                 E('上级分类不存在');
-            $this->repository->save($arr,['article_category_id'=>$id]);
-            return $this->success('编辑成功');
+            $this->repository->update($arr,['article_category_id'=>$id]);
+            return $this->success([],'编辑成功');
         }
     }
 
@@ -75,9 +79,9 @@ class ArticleCategory extends AdminBaseController
     {
         if ($this->repository->existsWhere(['pid'=>$id]))
             E('存在子级,无法删除');
-        $data = $this->repository->get($id);
+        $data = $this->repository->find($id);
         if(empty($data))E('已经删除');
         $res = $data->delete($id);
-        return $this->success('删除成功',$res);
+        return $this->success([],'删除成功');
     }
 }

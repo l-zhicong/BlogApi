@@ -91,7 +91,7 @@ Route::group('adminapi',function (){
                 Route::get('updateForm/:id', 'v1.article.ArticleCategory/update')->name('systemArticleCategoryUpdateForm');
                 Route::post('update/:id', 'v1.article.ArticleCategory/update')->name('systemArticleCategoryUpdate');
                 Route::post('status/:id', 'v1.article.ArticleCategory/switchStatus')->name('systemArticleCategoryStatus');
-                Route::post('delete/:id', 'v1.article.ArticleCategory/delete')->name('systemArticleCategoryDelete');
+                Route::delete('delete/:id', 'v1.article.ArticleCategory/delete')->name('systemArticleCategoryDelete');
             });
         });
 
