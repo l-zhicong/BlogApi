@@ -17,13 +17,37 @@ class ArticleValidate extends BaseValidate
     protected $failException = true;
 
     protected $rule = [
-        'account|管理员账号' => 'require|max:11',
-        'pwd|密码' => 'require',
-        'real_name|管理员姓名' => 'integer|max:10',
-        'roles|管理员身份' => 'array'
+        'cid|选择分类' => 'require',
+        'name|文章名称' => 'require',
+//        'logo|文章logo' => 'require',
+        'title|标题' => 'require',
+        'abstract|摘要' => 'require',
+        'content|正文' => 'require',
+        'related_words|关联词' => 'require',
+        'source|来源' => 'require',
+        'author|作者' => 'require',
+        'release_time|发布时间' => 'integer'
     ];
 
-    public function isUpdate(){
+    //后面再做限制
+    public function isUpdate()
+    {
+        return $this;
+    }
+
+    public function isRead()
+    {
+        $this->rule = [
+            'id' => 'require',
+        ];
+        return $this;
+    }
+
+    public function isFabulous()
+    {
+        $this->rule = [
+            'id'=> 'require'
+        ];
         return $this;
     }
 }

@@ -11,7 +11,7 @@ use think\Validate;
 /**
  * 控制器基础类
  */
-abstract class BaseController extends Json
+abstract class ApiBaseController extends Json
 {
     /**
      * Request实例
@@ -54,12 +54,6 @@ abstract class BaseController extends Json
     protected $userInfo;
 
     /**
-     * 当前登陆管理员ID
-     * @var
-     */
-    protected $adminId;
-
-    /**
      * 当前登陆用户ID
      * @var
      */
@@ -95,9 +89,9 @@ abstract class BaseController extends Json
     // 初始化
     protected function initialize()
     {
-        $this->adminId = $this->request->adminId();
+        $this->uid = $this->request->adminId();
         $this->userInfo = $this->request->userInfo();
-        $this->plat = $this->request->plat();
+        $this->plat = $this->request->plat()??2;
         $this->auth = $this->request->adminInfo['rule'] ?? [];
     }
 

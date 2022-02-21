@@ -60,7 +60,7 @@ class ArticleCategory extends Base
 
     public function switchStatus(int $id,int $status){
         if (!$this->getCategoryId(['article_category_id'=>$id]))E('分类不存在');
-        $res = $this->model->save(compact('status'),['article_category_id'=>$id]);
+        $res = $this->model->where(['article_category_id'=>$id])->update(compact('status'));
         return $res;
     }
 

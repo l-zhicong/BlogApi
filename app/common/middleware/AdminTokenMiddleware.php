@@ -22,10 +22,10 @@ use app\common\utils\JwtAuth;
 use Throwable;
 
 /**
- * Class AuthTokenMiddleware
+ * Class AdminTokenMiddleware
  * @package app\api\middleware
  */
-class AuthTokenMiddleware extends BaseMiddleware
+class AdminTokenMiddleware extends BaseMiddleware
 {
     public function before(Request $request)
     {

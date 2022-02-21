@@ -23,4 +23,8 @@ class ArticleCategoryValidate extends BaseValidate
         return $this;
     }
 
+    public function isUpdate(){
+        return $this;
+    }
+
 }

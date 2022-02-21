@@ -52,4 +52,11 @@ class Menu extends Base
         return formatTree($options, 'menu_name');
     }
 
+    public function del($id)
+    {
+        if ($this->model->pidExists($id))E('存在下级,无法删除');
+        $res = $this->model->where("menu_id",$id)->delete();
+        if (!$res)E("删除失败");
+    }
+
 }
