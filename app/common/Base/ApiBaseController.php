@@ -1,7 +1,7 @@
 <?php
 declare (strict_types = 1);
 
-namespace app;
+namespace app\common\Base;
 
 use app\common\utils\Json;
 use think\App;
@@ -89,10 +89,8 @@ abstract class ApiBaseController extends Json
     // 初始化
     protected function initialize()
     {
-        $this->uid = $this->request->adminId();
-        $this->userInfo = $this->request->userInfo();
-        $this->plat = $this->request->plat()??2;
-        $this->auth = $this->request->adminInfo['rule'] ?? [];
+//        $this->userInfo = $this->request->userInfo();
+//        $this->plat = $this->request->plat()??2;
     }
 
     /**

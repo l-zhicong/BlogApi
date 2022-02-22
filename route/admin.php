@@ -15,6 +15,7 @@ use think\facade\Route;
 Route::group('adminapi',function (){
     /*public*/
     Route::group(function () {
+        Route::post('Picture/upload', 'v1.Picture/upload');//上传图片
         //用户名密码登录
         Route::post('login', 'Login/login')->name('AdminLogin');
         Route::post('logout','Login/logout');
@@ -95,6 +96,10 @@ Route::group('adminapi',function (){
             });
         });
 
+        Route::group('myhomepage', function () {
+            Route::get('lst','v1.mydata.HomePage/getList');
+            Route::post('create','v1.mydata.HomePage/create');
+        });
     })->middleware(AdminTokenMiddleware::class)->middleware(AllowOriginMiddleware::class);
 
 
