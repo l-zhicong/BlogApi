@@ -10,11 +10,14 @@
 // +----------------------------------------------------------------------
 use app\common\middleware\AllowOriginMiddleware;
 use app\common\middleware\AdminTokenMiddleware;
+use think\facade\Config;
 use think\facade\Route;
+use think\Response;
 
 Route::group('adminapi',function (){
     /*public*/
     Route::group(function () {
+        Route::post('Picture/upload', 'v1.Picture/upload');//上传图片
         //用户名密码登录
         Route::post('login', 'Login/login')->name('AdminLogin');
         Route::post('logout','Login/logout');
@@ -95,7 +98,24 @@ Route::group('adminapi',function (){
             });
         });
 
-    })->middleware(AdminTokenMiddleware::class)->middleware(AllowOriginMiddleware::class);
+        Route::group('myhomepage', function () {
+            Route::get('lst','v1.mydata.HomePage/getList');
+            Route::post('create','v1.mydata.HomePage/create');
+        });
+    })->middleware([
+        AllowOriginMiddleware::class,
+        AdminTokenMiddleware::class
+    ]);
 
-
+    /**
+     * miss 路由
+     */
+    Route::miss(function () {
+        if (app()->request->isOptions()) {
+            $header = Config::get('cookie.header')->option(['real_name' => '']);
+            $header['Access-Control-Allow-Origin'] = app()->request->header('origin')->option(['real_name' => '']);
+            return Response::create('ok')->code(200)->header($header);
+        } else
+            return Response::create()->code(404);
+    });
 })->prefix('admin.');

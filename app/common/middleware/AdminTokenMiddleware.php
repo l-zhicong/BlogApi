@@ -29,7 +29,7 @@ class AdminTokenMiddleware extends BaseMiddleware
 {
     public function before(Request $request)
     {
-        $plat = $request->param('plat');//中后台才有的参数
+//        $plat = $request->param('plat');//中后台才有的参数
         $token = trim($request->header('X-Token'));
         if (strpos($token, 'Bearer') === 0)
             $token = trim(substr($token, 6));
