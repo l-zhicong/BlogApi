@@ -10,37 +10,33 @@ use think\Response;
 /**
  * 跨域中间件
  */
-class AllowOriginMiddleware extends BaseMiddleware
+class AllowOriginMiddleware implements MiddlewareInterface
 {
-    protected $header = [
-        'Access-Control-Allow-Credentials' => 'true',
-        'Access-Control-Max-Age'           => 1800,
-        'Access-Control-Allow-Methods'     => 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers'     => 'Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-CSRF-TOKEN, X-Requested-With, X-token, force,Access-Token',
-    ];
+    /**
+     * 允许跨域的域名
+     * @var string
+     */
+    protected $cookieDomain;
 
-    public function before(Request $request)
+    /**
+     * @param Request $request
+     * @param \Closure $next
+     * @return Response
+     */
+    public function handle(Request $request, \Closure $next)
     {
-        $cookieDomain = Config::get('cookie.domain', '');
+        $this->cookieDomain = Config::get('cookie.domain', '');
+        $header = Config::get('cookie.header');
+        $origin = $request->header('origin');
 
-        if (!isset($this->header['Access-Control-Allow-Origin'])) {
-            $origin = $request->header('origin');
-            if ($origin && ('' == $cookieDomain || strpos($origin, $cookieDomain))) {
-                $this->header['Access-Control-Allow-Origin'] = $origin;
-            } else {
-                $this->header['Access-Control-Allow-Origin'] = '*';
-            }
+        if ($origin && ('' == $this->cookieDomain || strpos($origin, $this->cookieDomain)))
+            $header['Access-Control-Allow-Origin'] = $origin;
+        if ($request->method(true) == 'OPTIONS') {
+            $response = Response::create('ok')->code(200)->header($header);
+        } else {
+            $response = $next($request)->header($header);
         }
-
-        //杨秦伟 2020-04-15  如果为options方法，直接返回200状态
-        if($request->isOptions()) {
-            header('HTTP/1.1 200 OK');
-            exit;
-        }
-    }
-
-    public function after(Response $response)
-    {
-        // $response->header($this->header);
+        $request->filter(['strip_tags', 'addslashes', 'trim']);
+        return $response;
     }
 }

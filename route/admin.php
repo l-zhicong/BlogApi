@@ -10,7 +10,9 @@
 // +----------------------------------------------------------------------
 use app\common\middleware\AllowOriginMiddleware;
 use app\common\middleware\AdminTokenMiddleware;
+use think\facade\Config;
 use think\facade\Route;
+use think\Response;
 
 Route::group('adminapi',function (){
     /*public*/
@@ -100,7 +102,20 @@ Route::group('adminapi',function (){
             Route::get('lst','v1.mydata.HomePage/getList');
             Route::post('create','v1.mydata.HomePage/create');
         });
-    })->middleware(AdminTokenMiddleware::class)->middleware(AllowOriginMiddleware::class);
+    })->middleware([
+        AllowOriginMiddleware::class,
+        AdminTokenMiddleware::class
+    ]);
 
-
+    /**
+     * miss 路由
+     */
+    Route::miss(function () {
+        if (app()->request->isOptions()) {
+            $header = Config::get('cookie.header')->option(['real_name' => '']);
+            $header['Access-Control-Allow-Origin'] = app()->request->header('origin')->option(['real_name' => '']);
+            return Response::create('ok')->code(200)->header($header);
+        } else
+            return Response::create()->code(404);
+    });
 })->prefix('admin.');
