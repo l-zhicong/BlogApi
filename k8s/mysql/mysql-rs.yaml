@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mysql-rs
+  labels:
+    app: mysql
+    env: master
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+      env: master
+  template:
+    metadata:
+      labels:
+        app: mysql
+        env: master
+        creator: gerry
+    spec:
+      containers:
+        - name: blogapi
+          image: mysql:5.7
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /etc/mysql/conf.d/mysql.cnf  #容器的地址
+              name: mysql-cnf
+              subPath: mysql.cnf
+            - mountPath: /var/lib/mysql  #容器的地址
+              name: mysql-data
+            - mountPath: var/log/mysql  #容器的地址
+              name: mysql-log
+          ports:
+            - name: http
+              containerPort: 3306
+          env: # 写入到容器内的环境容量
+            - name: MYSQL_ROOT_PASSWORD         # 定义了一个mysql的root密码的变量
+              value: "root"
+      volumes:
+        - name: mysql-cnf
+          configMap: #kubectl create configmap mysql-cnf --from-file=mysql.cnf
+            name: mysql-cnf
+        - name: mysql-data
+          hostPath:
+            #mysql 持久化数据
+            path: /data/mysql/data
+            type: DirectoryOrCreate
+        - name: mysql-log
+          hostPath:
+            #mysql 日志
+            path: /data/mysql/log
+            type: DirectoryOrCreate

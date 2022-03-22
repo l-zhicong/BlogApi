@@ -20,9 +20,32 @@ spec:
     spec:
       containers:
         - name: blogapi
-          image: xiaoyaoguai/blogapi:v1
+          image: xiaoyaoguai/blogapi:v1.1
           imagePullPolicy: IfNotPresent
           #command: ["/bin/bash","-ce","tail -f /dev/null"]
+          volumeMounts:
+            - mountPath: /data/www/BlogApi/config  #容器的地址
+              name: config-path
+            - mountPath: /usr/local/etc/php/php.ini  #容器的地址
+              name: phpini-path
+              subPath: php.ini
+            - mountPath: /usr/local/etc/php-fpm.d/www.conf  #容器的地址
+              name: php-config-path
+              subPath: www.conf
           ports:
             - name: http
               containerPort: 8000
+      volumes:
+        - name: phpini-path
+          #kubectl create configmap php.ini --from-file=php.ini
+          configMap:
+            name: php.ini
+        - name: php-config-path
+          #kubectl create configmap www.conf --from-file=www.conf
+          configMap:
+            name: www.conf
+        - name: config-path
+          hostPath:
+            # directory location on host
+            path: /data/www/BlogApi/config
+            type: DirectoryOrCreate #可以指定子目录： subPa

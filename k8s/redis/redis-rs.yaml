@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: redis-rs
+  labels:
+    app: redis
+    env: master
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis
+      env: master
+  template:
+    metadata:
+      labels:
+        app: redis
+        env: master
+        creator: gerry
+    spec:
+      containers:
+        - name: blogapi
+          image: redis:latest
+          imagePullPolicy: IfNotPresent
+          command: "redis-server --requirepass '123456' --appendonly yes"
+          volumeMounts:
+            - mountPath: /data  #容器的地址
+              name: redis-data #对应上面卷的名称
+          ports:
+            - name: http
+              containerPort: 6379
+      volumes:
+        - name: redis-data
+          hostPath:
+            path: /data/www/redis/data
+            type: DirectoryOrCreate

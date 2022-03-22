@@ -13,7 +13,12 @@ RUN    sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
 RUN apt-get update &&\
     apt-get install -y     libfreetype6-dev libjpeg62-turbo-dev libpng-dev &&\
     docker-php-ext-configure gd --with-freetype --with-jpeg &&\
-    docker-php-ext-install -j$(nproc) gd
+    docker-php-ext-install -j$(nproc) gd \
+#           && docker-php-ext-install zip \
+           && docker-php-ext-install pdo_mysql \
+           && docker-php-ext-install opcache \
+           && docker-php-ext-install mysqli \
+           && rm -r /var/lib/apt/lists/*
 
 #pecl 安装扩展 redis
 RUN pecl install redis-5.3.2 \
@@ -21,9 +26,9 @@ RUN pecl install redis-5.3.2 \
 
 #安装conposer
 ENV COMPOSER_HOME /root/composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+#RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ENV PATH $COMPOSER_HOME/vendor/bin:$PATH
 
-RUN composer install
+#RUN composer install && cp k8s/php/php.ini /usr/local/etc/php && cp k8s/php/php-fpm.d/* /usr/local/etc/php-fpm.d/
 
-CMD ["php","think","run:8888"]
+CMD ["php","think","run"]

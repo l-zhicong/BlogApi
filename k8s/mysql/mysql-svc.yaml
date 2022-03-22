@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: blogapi-service
+  name: mysql-service
 spec:
   type: LoadBalancer
   selector:
-    app: blogapi
+    app: mysql
   ports:
     - protocol: TCP
-      port: 8000
-      nodePort: 30001
+      port: 3306
+      nodePort: 30002
