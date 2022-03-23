@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: mysql-service
 spec:
-  type: LoadBalancer
+  type: LoadBalancer  # 如果需要集群外部访问,这里改为NodePort  type:ClusterIP  ,LoadBalancer
   selector:
     app: mysql
   ports:

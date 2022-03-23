@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: ReplicaSet
+kind: ReplicaSet # sql 类不适合用rs  线上不建议把mysql搭建到容器
 metadata:
   name: mysql-rs
   labels:

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec:
+  type: ClusterIP  # 如果需要集群外部访问,这里改为NodePort  type:ClusterIP  ,LoadBalancer
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      nodePort: 30003

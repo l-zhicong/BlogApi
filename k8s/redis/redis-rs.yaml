@@ -19,18 +19,33 @@ spec:
         creator: gerry
     spec:
       containers:
-        - name: blogapi
+        - name: redis
           image: redis:latest
           imagePullPolicy: IfNotPresent
-          command: "redis-server --requirepass '123456' --appendonly yes"
+          command:
+            - "redis-server"
+          args:
+              - /usr/local/etc/redis/redis_6379.conf
           volumeMounts:
             - mountPath: /data  #容器的地址
               name: redis-data #对应上面卷的名称
+            - mountPath: /usr/local/etc/redis/redis_6379.conf #容器的地址
+                name: redis-cm
+                subPath: redis_6379.conf
           ports:
             - name: http
               containerPort: 6379
       volumes:
         - name: redis-data
           hostPath:
-            path: /data/www/redis/data
+            path: /data/redis/data
             type: DirectoryOrCreate
+        - name: redis-data
+            persistentVolumeClaim:
+              claimName: redis-pvc  # 这里填写pvc的名称
+        - name: redis-cm
+          configMap:
+            name: redis-cm
+            items:
+            - key: redis_6379.conf
+              path: redis_6379.conf
