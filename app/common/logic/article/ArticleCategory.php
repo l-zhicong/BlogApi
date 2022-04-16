@@ -75,4 +75,12 @@ class ArticleCategory extends Base
     public function getCategoryId($cid){
         return $this->model->existsWhere(['article_category_id'=>$cid]);
     }
+
+    public function getList($where,$limit)
+    {
+        $query = $this->model->search($where);
+        $list = $query->paginate($limit, false);
+        return formatPaginate($list);
+    }
+
 }

@@ -37,7 +37,7 @@ class Article extends AdminBaseController
     {
         $where = [];
         [$page, $limit] = $this->request->postMore([['page', 1],['limit',20]], true);
-        $res = $this->repository->List($where,$limit,$page);
+        $res = $this->repository->List($where,$limit);
         return $this->success($res);
     }
 

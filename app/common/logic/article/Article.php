@@ -55,12 +55,15 @@ class Article extends Base
     public function getData($where ,$uid = 0, $field = '*')
     {
         $data = $this->model->search($where)->field($field)->find();
+        if(empty($data)){
+            return [];
+        }
         $data['FabulousNum'] = $data->Fabulous->where('status',1)->count();
 //        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']);
         return $data->toArray();
     }
 
-    public function List($where,$limit,$page)
+    public function List($where,$limit)
     {
         $query = $this->model->search($where);
         $list = $query->paginate($limit, false);
