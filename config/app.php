@@ -19,7 +19,6 @@ return [
     'root_namespace'         => [
         'logic'   => '../application/common/logic/',
         'model'   => '../application/common/model/',
-        'logic' => '../application/common/logic/',
     ],
 
     // 应用映射（自动多应用模式有效）

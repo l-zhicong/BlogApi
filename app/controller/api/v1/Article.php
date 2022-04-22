@@ -24,9 +24,9 @@ class Article extends ApiBaseController
     }
 
     public function getList(){
-        [$page, $limit] = $this->request->getMore([['page', 1],['limit',20]], true);
-        $param = [];
-        $res = $this->repository->List($param,$limit);
+        [$cid, $limit] = $this->request->getMore([['cid'],['limit',20]], true);
+        $where = ['cid'=>$cid];
+        $res = $this->repository->List($where,$limit);
         return $this->success($res);
     }
 

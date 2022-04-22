@@ -17,12 +17,18 @@ use think\Response;
 Route::group('api',function (){
     /*public*/
     Route::group(function () {
+        Route::get("mp",function (){
+           return public_path('uploads/local').'1.mp3';
+        });
         Route::group("article",function (){
-            Route::get("list",'Article/getList');
+            Route::any("list",'Article/getList');
             Route::get("info/:id",'Article/getInfo');
             Route::group("category",function (){
                 Route::get('list','ArticleCategory/getList');
             });
+        });
+        Route::group("music",function(){
+           Route::get("list","Music/getList");
         });
     })->middleware(AllowOriginMiddleware::class);
 
