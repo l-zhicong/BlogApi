@@ -30,7 +30,8 @@ class MyHomePage extends Base
             return [];
         }
         $newData = $MyHomePageObj->toArray();
-        $newData['img_class'] = $MyHomePageObj->ImgClass;
+        $newData['img'] = $MyHomePageObj->Img()->where('is_del',0)->select()->toArray();
+        $newData['skills'] = $MyHomePageObj->Skills;
         return $newData;
     }
 

@@ -17,6 +17,6 @@ class MyHomePageImg extends BaseModel
 {
     protected $table = "myhomepage_img";
 
-    protected $pk = "img_class_id";
+    protected $pk = "id";
 
 }

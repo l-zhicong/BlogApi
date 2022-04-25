@@ -30,6 +30,12 @@ Route::group('api',function (){
         Route::group("music",function(){
            Route::get("list","Music/getList");
         });
+        Route::group("myhomepage",function (){
+           Route::get('info','HomePage/getInfo');
+        });
+        Route::group("letter",function(){
+            Route::post('sendOut',"Letter/sendOut");
+        });
     })->middleware(AllowOriginMiddleware::class);
 
     /**

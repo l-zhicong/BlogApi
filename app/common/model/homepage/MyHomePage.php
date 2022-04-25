@@ -16,9 +16,9 @@ class MyHomePage extends BaseModel
     protected $table = 'myhomepage';
     protected $pk = "id";
 
-    public function ImgClass()
+    public function Img()
     {
-        return $this->hasMany(MyHomePageImgClass::class,'home_id');
+        return $this->hasMany(MyHomePageImg::class,'home_id');
     }
 
     public function Skills()
