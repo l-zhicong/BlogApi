@@ -49,4 +49,4 @@ Route::group('api',function (){
         } else
             return Response::create()->code(404);
     });
-})->prefix('api.V1.');
+})->prefix('api.v1.');
