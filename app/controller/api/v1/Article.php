@@ -12,8 +12,10 @@
 namespace app\controller\api\v1;
 
 use app\common\Base\ApiBaseController;
+use app\common\logic\article\ArticleComment;
 use think\App;
 use app\common\logic\article\Article as ArticleRepository;
+use think\Exception;
 
 class Article extends ApiBaseController
 {
@@ -34,5 +36,16 @@ class Article extends ApiBaseController
         $where = ["id"=>$id];
         $res = $this->repository->getData($where);
         return $this->success($res);
+    }
+
+    public function Comment(){
+        try {
+            $param = $this->request->post();
+            $ArticleCommentModel = new ArticleComment();
+            $res  = $ArticleCommentModel->create($param);
+            return $this->success($res);
+        }catch (Exception){
+            $this->fail("评论失败");
+        }
     }
 }

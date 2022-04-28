@@ -58,8 +58,10 @@ class Article extends Base
         if(empty($data)){
             return [];
         }
+        $data['content'] = $data->content;
         $data['FabulousNum'] = $data->Fabulous->where('status',1)->count();
-//        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']);
+//        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']); //是否被点赞
+//        $data['comment'] = $data->comment; //评论
         return $data->toArray();
     }
 

@@ -41,6 +41,11 @@ class Article extends BaseModel
 
     }
 
+    public function comment()
+    {
+        return $this->hasOne(ArticleComment::class,'article_id','id');
+    }
+
     public function articleCategory()
     {
         return $this->hasOne(ArticleCategory::class ,'article_category_id','cid')
@@ -57,6 +62,6 @@ class Article extends BaseModel
             $query->where('id', $where['id']);
         })->when(isset($where['title']) && $where['title'] !== '', function ($query) use ($where) {
             $query->whereLike('title', "%{$where['title']}%");
-        })->with(['content','articleCategory'])->order('sort DESC,create_time DESC');
+        })->with(['articleCategory'])->order('sort DESC,create_time DESC');
     }
 }
