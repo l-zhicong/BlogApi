@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 use app\common\middleware\AllowOriginMiddleware;
 use app\common\middleware\AdminTokenMiddleware;
+use app\common\middleware\ApiTokenMiddleware;
 use think\facade\Config;
 use think\facade\Route;
 use think\Response;
@@ -36,6 +37,13 @@ Route::group('api',function (){
         Route::group("letter",function(){
             Route::post('sendOut',"Letter/sendOut");
         });
+
+        //需要登陆的操作
+        Route::group(function (){
+            Route::post("comment",'Article/Comment'); //评论
+        })->middleware(ApiTokenMiddleware::class);
+
+
     })->middleware(AllowOriginMiddleware::class);
 
     /**
