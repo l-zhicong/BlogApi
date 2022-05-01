@@ -24,6 +24,9 @@ class Passport{
                 $this->passportObject = new AdminUser();
                 break;
             case 2:
+                $this->type = "app";
+                $this->plat = $plat;
+                $this->passportObject = new AppUser();
                 break;
             default:
                 throw new PlatException('平台不存在');

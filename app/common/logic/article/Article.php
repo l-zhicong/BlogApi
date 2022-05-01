@@ -62,6 +62,11 @@ class Article extends Base
         $data['FabulousNum'] = $data->Fabulous->where('status',1)->count();
 //        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']); //是否被点赞
 //        $data['comment'] = $data->comment; //评论
+        //ip redis 60*60*24 限制刷浏览
+        //if (request()->ip())
+        if(true){
+            $this->model->save(['read_num'=>$data['read_num']+1],$where['id']);
+        }
         return $data->toArray();
     }
 
