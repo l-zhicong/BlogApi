@@ -18,7 +18,8 @@
 
 namespace app\common\logic\article;
 use app\common\logic\Base;
-use app\common\logic\article\ArticleFabulous as model;
+use app\common\model\article\ArticleFabulous as model;
+use app\common\model\article\Article as ArticleModel;
 
 class ArticleFabulous extends Base
 {
@@ -41,11 +42,12 @@ class ArticleFabulous extends Base
     /**
      * 更改点赞状态
      */
-    public function updateFabulous($uid,$article_id,Article $article)
+    public function updateFabulous($uid,$article_id)
     {
         $data['uid'] = $uid;
         $data['article_id'] = $article_id;
-        if(!$article->find($article_id))E('文章不存在');
+        $articleModel = new ArticleModel();
+        if(!$articleModel->find($article_id))E('文章不存在');
         $info = $this->model->where($data)->find();
         if(!$info){
             $this->model->save($data);

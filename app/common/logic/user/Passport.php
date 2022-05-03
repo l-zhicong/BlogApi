@@ -90,7 +90,7 @@ class Passport{
         $service = new JwtAuth();
         $exp = intval(config('system.token_exp'));
         $lastTime = date('Y-m-d H:i:s');
-        $platLastTime = Cache::set('login_last_time_'.$this->plat.'_'.$userId,$lastTime);
+        $platLastTime = Cache::store('redis')->set('login_last_time_'.$this->plat.'_'.$userId,$lastTime);
         $token = $service->createToken($userId, $this->type, $this->plat, $exp, ['login_time' => $lastTime]);
 //        $this->cacheToken($token['token'], $token['out']);
         return $token;

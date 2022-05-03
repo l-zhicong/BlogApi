@@ -2,8 +2,8 @@
 namespace app\common\logic\article;
 use app\common\logic\Base;
 use app\common\model\article\Article as Articlemodel;
-use app\common\model\article\ArticleFabulous;
 use think\Exception;
+use think\facade\Cache;
 use think\facade\Db;
 
 /**
@@ -21,6 +21,8 @@ class Article extends Base
     {
         $this->model = $model;
     }
+
+
 
     public function create(array $data) :void
     {
@@ -60,12 +62,17 @@ class Article extends Base
         }
         $data['content'] = $data->content;
         $data['FabulousNum'] = $data->Fabulous->where('status',1)->count();
-//        $data['isFabulous'] = (new ArticleFabulous())->isFabulous($uid,$where['id']); //是否被点赞
-//        $data['comment'] = $data->comment; //评论
+        $data['isFabulous'] = true;
+        if ($uid == 0){
+            $data['isFabulous'] = (new ArticleFabulous)->isFabulous($uid,$where['id']); //是否被点赞
+        }
+        $data['comment'] = $data->comment; //评论
         //ip redis 60*60*24 限制刷浏览
-        //if (request()->ip())
-        if(true){
-            $this->model->save(['read_num'=>$data['read_num']+1],$where['id']);
+        $redis = Cache::store('redis');
+        $ip = request()->ip();
+        if (!$redis->get($ip)){
+            $redis->set(request()->ip(),true,60*60*24);
+            $this->model->where('id',$where['id'])->update(['read_num'=>$data['read_num']+1]);
         }
         return $data->toArray();
     }
@@ -74,11 +81,11 @@ class Article extends Base
     {
         $query = $this->model->search($where);
         $list = $query->paginate($limit, false);
-//        foreach ($list as $k=> $v)
-//        {
-//            $list[$k]['Fabulous'] = $v->Fabulous;
-//            $list[$k]['FabulousNum'] = $v->Fabulous->where('status',1)->count();
-//        }
+        foreach ($list as $k=> $v)
+        {
+            $list[$k]['FabulousNum'] = $v->Fabulous()->where('status',1)->count();
+            $list[$k]['commentNum'] = $v->comment->count();
+        }
         return formatPaginate($list);
     }
 

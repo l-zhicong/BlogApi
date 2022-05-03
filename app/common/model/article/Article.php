@@ -43,7 +43,7 @@ class Article extends BaseModel
 
     public function comment()
     {
-        return $this->hasOne(ArticleComment::class,'article_id','id');
+        return $this->hasMany(ArticleComment::class,'article_id','id');
     }
 
     public function articleCategory()
