@@ -13,8 +13,10 @@ namespace app\controller\api\v1;
 
 use app\common\Base\ApiBaseController;
 use app\common\logic\article\ArticleComment;
+use app\common\logic\article\ArticleFabulous;
 use think\App;
 use app\common\logic\article\Article as ArticleRepository;
+use think\Cache;
 use think\Exception;
 
 class Article extends ApiBaseController
@@ -36,6 +38,17 @@ class Article extends ApiBaseController
         $where = ["id"=>$id];
         $res = $this->repository->getData($where);
         return $this->success($res);
+    }
+
+    public function Fabulous(){
+        [$uid,$article_id] = $this->request->postMore(['uid','article_id']);
+        $has = (new ArticleFabulous())->updateFabulous($uid,$article_id);
+        if ($has){
+            return $this->success([]);
+        }else{
+            return $this->fail();
+        }
+
     }
 
     public function Comment(){
