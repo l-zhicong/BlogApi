@@ -27,4 +27,10 @@ class Letter extends Base
         return $res->toArray();
     }
 
+    public function getList($where,$limit){
+        $query = $this->model->search($where);
+        $list = $query->paginate($limit, false);
+        return formatPaginate($list);
+    }
+
 }

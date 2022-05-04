@@ -24,7 +24,7 @@ class HomePage extends ApiBaseController
     }
 
     public function getInfo(){
-        $res = $this->repository->getInfo();
+        $res = $this->repository->getInfo([],1);
         return $this->success($res);
     }
 

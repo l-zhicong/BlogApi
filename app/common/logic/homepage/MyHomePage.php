@@ -3,8 +3,6 @@ namespace app\common\logic\homepage;
 use app\common\logic\Base;
 use app\common\model\homepage\MyHomePage as MyHomePageModel;
 use think\Exception;
-use think\facade\Db;
-use think\facade\Log;
 
 /**
  * Class MyHomePage
@@ -23,9 +21,16 @@ class MyHomePage extends Base
         $this->model = new MyHomePageModel();
     }
 
-    public function getInfo(){
+    public function getList($where,$limit){
+        $query = $this->model->search($where);
+        $query->with(['Img','Skills']);
+        $list = $query->paginate($limit, false);
+        return formatPaginate($list);
+    }
 
-        $MyHomePageObj = $this->model->search([],1)->find();
+    public function getInfo($where,$is_app = null){
+
+        $MyHomePageObj = $this->model->search($where,$is_app)->find();
         if (is_null($MyHomePageObj)){
             return [];
         }

@@ -24,7 +24,9 @@ class HomePage extends AdminBaseController
     }
 
     public function getList(){
-        [$page, $limit] = $this->request->getMore([['page', 1],['limit',20]], true);
+        [$limit] = $this->request->getMore([['limit',20]], true);
+        $res = $this->getList();
+
         $newData["list"] = [
             [
               "id"=>1,
@@ -54,7 +56,9 @@ class HomePage extends AdminBaseController
     }
 
     public function getInfo(){
-
+        $where = [];
+        $res = $this->repository->getInfo($where);
+        return $this->success($res);
     }
 
     public function updata(){
