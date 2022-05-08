@@ -21,9 +21,9 @@ class ApiTokenMiddleware extends BaseMiddleware
     public function before(Request $request)
     {
         $token = $request->header("A-Token");
-        if (!isset($token)){
-            throw new Exception();
-        }
+//        if (!isset($token)){
+//            throw new Exception();
+//        }
         // TODO: Implement before() method.
     }
 

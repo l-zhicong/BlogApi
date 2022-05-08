@@ -32,7 +32,7 @@ class ArticleComment extends Base
             }
         }
         $res = $this->model->create($data);
-        return $res;
+        return $res->toArray();
     }
 
 }

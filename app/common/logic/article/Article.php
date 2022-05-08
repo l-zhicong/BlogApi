@@ -56,17 +56,19 @@ class Article extends Base
 
     public function getData($where ,$uid = 0, $field = '*')
     {
+
         $data = $this->model->search($where)->field($field)->find();
         if(empty($data)){
             return [];
         }
-        $data['content'] = $data->content;
-        $data['FabulousNum'] = $data->Fabulous->where('status',1)->count();
-        $data['isFabulous'] = true;
+        $newData = $data->toArray();
+        $newData['content'] = $data->content;
+        $newData['FabulousNum'] = $data->Fabulous->where('status',1)->count();
+        $newData['isFabulous'] = false;
         if ($uid == 0){
-            $data['isFabulous'] = (new ArticleFabulous)->isFabulous($uid,$where['id']); //是否被点赞
+            $newData['isFabulous'] = (new ArticleFabulous)->isFabulous($uid,$where['id']); //是否被点赞
         }
-        $data['comment'] = $data->comment; //评论
+        $newData['comment'] = formatCategory($data->comment->toArray(),'id','pid','list'); //评论
         //ip redis 60*60*24 限制刷浏览
         $redis = Cache::store('redis');
         $ip = request()->ip();
@@ -74,7 +76,7 @@ class Article extends Base
             $redis->set(request()->ip(),true,60*60*24);
             $this->model->where('id',$where['id'])->update(['read_num'=>$data['read_num']+1]);
         }
-        return $data->toArray();
+        return $newData;
     }
 
     public function List($where,$limit)
