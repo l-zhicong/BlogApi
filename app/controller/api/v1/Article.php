@@ -14,6 +14,7 @@ namespace app\controller\api\v1;
 use app\common\Base\ApiBaseController;
 use app\common\logic\article\ArticleComment;
 use app\common\logic\article\ArticleFabulous;
+use app\validate\api\article\ArticleValidate;
 use think\App;
 use app\common\logic\article\Article as ArticleRepository;
 use think\Cache;
@@ -21,13 +22,15 @@ use think\Exception;
 
 class Article extends ApiBaseController
 {
-    public function __construct(App $app,ArticleRepository $repository)
+    public function __construct(App $app,ArticleRepository $repository,ArticleValidate $validate)
     {
         parent::__construct($app);
         $this->repository = $repository;
+        $this->validate = $validate;
     }
 
     public function getList(){
+        $this->validate->goCheck();
         [$cid, $limit] = $this->request->getMore([['cid'],['limit',20]], true);
         $where = ['cid'=>$cid];
         $res = $this->repository->List($where,$limit);
@@ -35,6 +38,7 @@ class Article extends ApiBaseController
     }
 
     public function getInfo($id){
+        $this->validate->getInfo()->goCheck();
         $where = ["id"=>$id];
         $res = $this->repository->getData($where);
         return $this->success($res);
@@ -52,6 +56,7 @@ class Article extends ApiBaseController
     }
 
     public function Comment(){
+        $this->validate->getInfo()->goCheck();
         try {
             $param = $this->request->post();
             $ArticleCommentModel = new ArticleComment();

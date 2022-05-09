@@ -12,19 +12,22 @@
 namespace app\controller\api\v1;
 
 use app\common\Base\ApiBaseController;
+use app\validate\api\homepage\LetterValidata;
 use think\App;
 use app\common\logic\homepage\Letter as LetterRepository;
 
 class Letter extends ApiBaseController
 {
-    public function __construct(App $app,LetterRepository $repository)
+    public function __construct(App $app,LetterRepository $repository,LetterValidata $validata)
     {
         parent::__construct($app);
         $this->repository = $repository;
+        $this->validate = $validata;
     }
 
 
     public function sendOut(){
+        $this->validate->sendOut()->goCheck();
         [$name, $email,$message] = $this->request->postMore([['name'],['email'],['message']], true);
         $data = [
             "name" => $name,

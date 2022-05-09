@@ -12,19 +12,22 @@
 namespace app\controller\api\v1;
 
 use app\common\Base\ApiBaseController;
+use app\validate\api\article\ArticleCategoryValidate;
 use think\App;
 use app\common\logic\article\ArticleCategory as Repository;
 
 class ArticleCategory extends ApiBaseController
 {
-    public function __construct(App $app,Repository $repository)
+    public function __construct(App $app,Repository $repository,ArticleCategoryValidate $validate)
     {
         parent::__construct($app);
         $this->repository = $repository;
+        $this->validate = $validate;
     }
 
     public function getList(){
-        [$page, $limit] = $this->request->getMore([['page', 1],['limit',20]], true);
+        $this->validate->goCheck();
+        [$limit] = $this->request->getMore([['limit',20]], true);
         $param = [];
         $result = $this->repository->getList($param,$limit);
         return $this->success($result);
