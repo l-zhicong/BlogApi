@@ -72,6 +72,9 @@ abstract class ApiBaseController extends Json
      */
     protected $auth = [];
 
+
+    protected $validate;
+
     /**
      * 构造方法
      * @access public
