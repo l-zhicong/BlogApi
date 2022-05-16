@@ -16,9 +16,8 @@ class ArticleValidate extends BaseValidate
     protected $failException = true;
 
     protected $rule = [
-        'limit|选择分类' => 'int',
-        'name|文章名称' => 'string',
-        'limit|页数' => 'int'
+        'name|文章名称' => 'max:25',
+        'limit|页数' => 'integer'
     ];
 
     public function getInfo(){

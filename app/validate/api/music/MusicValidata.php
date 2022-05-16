@@ -17,8 +17,8 @@ class MusicValidata extends BaseValidate
     protected $failException = true;
 
     public $rule = [
-        'name|名称' => 'string',
-        'limit|页数' => 'int',
+        'name|名称' => 'max:50',
+        'limit|页数' => 'integer',
     ];
 
     public function getList(){
