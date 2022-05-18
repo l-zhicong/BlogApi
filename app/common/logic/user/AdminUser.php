@@ -14,9 +14,9 @@ class AdminUser extends Base implements AbsUser {
 
     public function login($param)
     {
-        $account = $param['account'];
+        $phone = $param['phone'];
         $pwd = md5($param['pwd']);
-        $adminInfo = $this->model->getInfoByAccount($account);
+        $adminInfo = $this->model->getInfoByPhone($phone);
         if(!$adminInfo) E('账号不存在');
         if($adminInfo['status'] != 1) E('账号已关闭');
         if($pwd != $adminInfo->pwd) E('密码错误');
@@ -35,4 +35,10 @@ class AdminUser extends Base implements AbsUser {
         $userArray["name"] = $userObj->real_name;
         return $userArray;
     }
+
+    public function register($param){
+        // TODO: Implement register() method.
+        return "后台暂无注册";
+    }
+
 }

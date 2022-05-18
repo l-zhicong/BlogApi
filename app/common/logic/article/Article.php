@@ -69,6 +69,7 @@ class Article extends Base
             $newData['isFabulous'] = (new ArticleFabulous)->isFabulous($uid,$where['id']); //是否被点赞
         }
         $newData['comment'] = formatCategory($data->comment->toArray(),'id','pid','list'); //评论
+        $newData['commentNum'] = count($data->comment);
         //ip redis 60*60*24 限制刷浏览
         $redis = Cache::store('redis');
         $ip = request()->ip();

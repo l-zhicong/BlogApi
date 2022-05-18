@@ -56,14 +56,15 @@ class Article extends ApiBaseController
     }
 
     public function Comment(){
-        $this->validate->getInfo()->goCheck();
-        try {
-            $param = $this->request->post();
-            $ArticleCommentModel = new ArticleComment();
-            $res  = $ArticleCommentModel->create($param);
-            return $this->success($res);
-        }catch (Exception){
-            $this->fail("评论失败");
+        $this->validate->comment()->goCheck();
+        $param = $this->request->postMore(['id','article_id','content']);
+//        $param['uid'] = $this->uid;
+        $ArticleCommentModel = new ArticleComment();
+        $res  = $ArticleCommentModel->create($param);
+        if ($res){
+            return $this->success([]);
+        }else{
+            return $this->fail("评论失败");
         }
     }
 }

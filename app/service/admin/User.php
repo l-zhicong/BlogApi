@@ -1,10 +1,10 @@
 <?php
-namespace app\service\admin\user;
+
+namespace app\service\admin;
 
 use app\common\logic\user\Passport;
-use app\lib\exception\PlatException;
 
-class Login
+class User
 {
     private $plat = 1;
 
@@ -42,4 +42,7 @@ class Login
         return "退出登录";
     }
 
+    public function getInfo(){
+        return ['roles'=>["超级管理员",'饲养员'],"name"=>"廖淑慧"];
+    }
 }

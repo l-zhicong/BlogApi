@@ -23,7 +23,7 @@ class Passport{
                 $this->plat = $plat;
                 $this->passportObject = new AdminUser();
                 break;
-            case 2:
+            case 3:
                 $this->type = "app";
                 $this->plat = $plat;
                 $this->passportObject = new AppUser();
@@ -46,6 +46,11 @@ class Passport{
         $loginInfo = $this->passportObject->login($param);
 //        $this->loginInfo = $loginInfo;
         return $loginInfo;
+    }
+
+    public function register($param)
+    {
+        return $this->passportObject->register($param);
     }
 
     public function getInfo($uid){

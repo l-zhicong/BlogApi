@@ -18,21 +18,42 @@ class ArticleComment extends Base
 {
     public function __construct()
     {
-        $this->model = new  CommentModel;
+        $this->model = new CommentModel();
     }
 
     public function create($data)
     {
-        if (isset($data['id']) && empty($data['id'])) {
-            $CommentOjb = $this->model->getField($data['id'], 'level,pid,id');
-            if ($CommentOjb->level <= 3) {
-                $data['pid'] = $CommentOjb->id;
-            } else {
-                $data['pid'] = $CommentOjb->pid;
+        try {
+            if (isset($data['id']) && $data['id'] != 0) {
+                $CommentObj = $this->model->field( 'level,pid,id')->find($data['id']);
+                if ($CommentObj->isEmpty()){
+                    $data['pid'] = 0;
+                }else{
+                    if ($CommentObj->level < 3) {
+                        $data['pid'] = $CommentObj->id;
+                        $data['level'] = $CommentObj->level + 1;
+                    } else {
+                        $data['pid'] = $CommentObj->pid;
+                        $data['level'] = $CommentObj->level;
+                    }
+                }
+                unset($data['id']);
+                $this->model->create($data);
+                return true;
+            }else{
+                unset($data['id']);
+                $this->model->create($data);
+                return true;
             }
+        }catch (\Exception $e){
+            return false;
         }
-        $res = $this->model->create($data);
-        return $res->toArray();
+    }
+
+    public function getList($articleId){
+        $where = ["article_id"=>$articleId];
+        $commentObj = $this->model->search($where)->select();
+        return formatCategory($commentObj->toArray(),'id','pid','list');
     }
 
 }
