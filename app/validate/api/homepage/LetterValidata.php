@@ -16,9 +16,9 @@ class LetterValidata extends BaseValidate
     protected $failException = true;
 
     protected $rule = [
-        'name|名称' => 'string',
+        'name|名称' => 'max:50',
         'email|邮箱' => 'email',
-        'message|信息' => 'string'
+        'message|信息' => 'min:5|max:200'
     ];
 
     public function sendOut(){

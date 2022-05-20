@@ -18,9 +18,9 @@ use think\Response;
 Route::group('api',function (){
     /*public*/
     Route::group(function () {
-        Route::get("mp",function (){
-           return public_path('uploads/local').'1.mp3';
-        });
+        Route::post("register","Login/register"); //注册
+        Route::post("login","Login/login"); //登陆
+
         Route::group("article",function (){
             Route::any("list",'Article/getList');
             Route::get("info/:id",'Article/getInfo');

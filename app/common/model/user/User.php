@@ -37,9 +37,9 @@ class User extends BaseModel
     }
 
 
-    public function getAccountInfo($account)
+    public function getPhoneInfo($phone)
     {
-        $UserMode = $this->find();
+        $UserMode = $this->where("phone",$phone)->find();
         return $UserMode;
     }
 

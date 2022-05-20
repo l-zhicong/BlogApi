@@ -18,7 +18,7 @@ class ArticleCategoryValidate extends BaseValidate
     protected $failException = true;
 
     protected $rule = [
-        'limit|页数' => 'int'
+        'limit|页数' => 'integer'
     ];
 
 }

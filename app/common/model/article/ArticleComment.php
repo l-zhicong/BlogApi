@@ -16,5 +16,13 @@ use app\common\model\BaseModel;
 class ArticleComment extends BaseModel
 {
     protected $table = 'article_comment';
+    protected $pk = 'id';
 
+
+    public function search(array $where)
+    {
+        return $this->when(isset($where['article_id']) && $where['article_id'] !== '', function ($query) use ($where) {
+            $query->where('article_id', $where['article_id']);
+        });
+    }
 }

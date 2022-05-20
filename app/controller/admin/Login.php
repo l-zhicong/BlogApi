@@ -11,7 +11,7 @@
 namespace app\controller\admin;
 
 use app\common\Base\AdminBaseController;
-use app\service\admin\user\Login as Service;
+use app\service\admin\User as Service;
 use app\common\utils\Captcha;
 use app\validate\admin\setting\SystemAdminValidata;
 use think\App;
@@ -76,6 +76,6 @@ class Login extends AdminBaseController
      */
     public function info()
     {
-        return $this->success($this->services->getLoginInfo());
+        return $this->success($this->service->getLoginInfo());
     }
 }

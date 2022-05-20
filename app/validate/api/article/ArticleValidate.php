@@ -16,21 +16,22 @@ class ArticleValidate extends BaseValidate
     protected $failException = true;
 
     protected $rule = [
-        'limit|选择分类' => 'int',
-        'name|文章名称' => 'string',
-        'limit|页数' => 'int'
+        'name|文章名称' => 'max:25',
+        'limit|页数' => 'integer'
     ];
 
     public function getInfo(){
         $this->rule = [
-            'id' => 'require',
+            'id' => 'integer',
         ];
         return $this;
     }
 
     public function comment(){
         $this->rule = [
-
+            'id' => 'integer',
+            'article_id' => 'integer',
+            'content' => 'max:30|min:5'
         ]; // 数据库的字段
         return $this;
     }
