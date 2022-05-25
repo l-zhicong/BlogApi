@@ -21,9 +21,9 @@ class SystemAdmin extends BaseModel
         'last_time' => 'timestamp',
     ];
 
-    public function getInfoByPhone($phone)
+    public function getInfoByAccount($account)
     {
-        return $this->where('phone',$phone)->find();
+        return $this->where('account',$account)->find();
     }
 
     public function getInfoById($adminId)
