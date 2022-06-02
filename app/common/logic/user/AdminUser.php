@@ -14,9 +14,9 @@ class AdminUser extends Base implements AbsUser {
 
     public function login($param)
     {
-        $phone = $param['phone'];
+        $account = $param['account'];
         $pwd = md5($param['pwd']);
-        $adminInfo = $this->model->getInfoByPhone($phone);
+        $adminInfo = $this->model->getInfoByAccount($account);
         if(!$adminInfo) E('账号不存在');
         if($adminInfo['status'] != 1) E('账号已关闭');
         if($pwd != $adminInfo->pwd) E('密码错误');
