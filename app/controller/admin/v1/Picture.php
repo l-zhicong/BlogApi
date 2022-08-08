@@ -30,19 +30,17 @@ class Picture extends AdminBaseController
 //        {
 //            return $this->fail("非法操作");
 //        }
-
         $upload = new Upload(1);//选择本地上传
         $validate = config('upload.local');
         $upload->to('local')->validate($validate)->move("files");
         $res = $upload->getUploadInfo();
-
 //        if (Cache::has('start_uploads_'. $user_type. '_' . $uid))
 //            $start_uploads = (int)Cache::get('start_uploads_'. $user_type. '_' . $uid);
 //        else
 //            $start_uploads = 0;
 //        $start_uploads++;
 //        Cache::set('start_uploads_'. $user_type. '_' . $uid, $start_uploads, $sys_imguploads['time']);
-        return $this->success(['name' => $res['name'], 'url' => 'http://'.request()->ip().':8888'.$res['dir']],'图片上传成功!');
+        return $this->success(['name' => $res['name'], 'url' => $res['dir']],'图片上传成功!');
     }
 }
 
